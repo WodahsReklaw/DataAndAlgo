@@ -27,15 +27,14 @@ void PrintVec(const vector<int>& vec){
 void MaxHeapify(vector<int>& vec, unsigned i) {
   unsigned l = LeftChild(i);
   unsigned r = RightChild(i);
-  unsigned largest = (l < vec.size() and vec[i] < vec[l]) ? l : i;
-  largest = (r < vec.size() and vec[largest] < vec[r]) ? r : largest;
-  if (largest != i) {
-    //std::cout << "i: " << i << "\tl: " << l << "\tr: " << r
-    //<< "\tlargest: " << largest << std::endl;
-    std::swap(vec[i], vec[largest]);
-    //PrintVec(vec);
-    MaxHeapify(vec, largest);
-    MaxHeapify(vec, i);
+  unsigned largest = i;
+  unsigned last_largest = -1;
+  while (largest != last_largest) {
+    largest = (l < vec.size() and vec[largest] < vec[l]) ? l : largest;
+    largest = (r < vec.size() and vec[largest] < vec[r]) ? r : largest;
+    if (largest != last_largest) {
+      std::swap(vec[i], vec[largest]);
+    }
   }
 }
 

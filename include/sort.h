@@ -13,6 +13,10 @@ namespace sort {
   // MergeSort function template.
   template <typename T>
   void MergeSort(std::vector<T>&);
+
+  // HeapSort function template.
+  template <typename T>
+  void HeapSort(std::vector<T>&);
 }
 #include "sort.tpp"
 
