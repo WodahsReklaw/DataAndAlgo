@@ -17,7 +17,19 @@ namespace sort {
   // HeapSort function template.
   template <typename T>
   void HeapSort(std::vector<T>&);
+
+  // QuickSort function template.
+  template <typename T>
+  void QuickSort(std::vector<T>&);
+
+  template <typename T>
+  void RandomizedQuickSort(std::vector<T>&);
+
+  // QuickSort helper partition.
+  template <typename T>
+  std::size_t Partition(std::vector<T>&, std::size_t p, std::size_t r);
 }
 #include "sort.tpp"
+#include "heap.tpp"
 
 #endif
