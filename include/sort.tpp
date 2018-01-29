@@ -1,13 +1,30 @@
 #ifndef __SORT_TPP__
 #define __SORT_TPP__
 
+#include <algorithm>
+#include <iostream>
 #include <iterator>
+#include <random>
 #include <vector>
 
 #include "sort.h"
+#include "heap.h"
 
 template <typename T>
-void sort::InsertionSort(std::vector<T>& vec){
+void sort::HeapSort(std::vector<T>& vec) {
+
+  if (vec.size() < 2) {
+    return;
+  }
+  heap::BuildMaxHeap(vec);
+  for (auto i = vec.size() - 1; i != 0; --i) {
+    std::swap(vec[0], vec[i]);
+    heap::MaxHeapify(vec, 0, i);
+  }
+}
+
+template <typename T>
+void sort::InsertionSort(std::vector<T>& vec) {
 
   const auto vec_size = vec.size();
   // Vector is already sorted since it has one element, or is empty.
@@ -76,6 +93,65 @@ void sort::MergeSort(std::vector<T>& vec){
   if (vec.size() > 0) {
     MergeSortHelper(vec, 0, vec.size());
   }
+}
+
+template <typename T>
+std::size_t sort::Partition(std::vector<T>& vec, std::size_t p, std::size_t r) {
+  auto x = vec[r];
+  std::size_t i = p;
+  for (auto j = p; j < r; ++j) {
+    if (vec[j] <= x) {
+      std::swap(vec[i], vec[j]);
+      ++i;
+    }
+  }
+  std::swap(vec[i], vec[r]);
+  return i;
+}
+
+template <typename T>
+void QuickSortHelper(std::vector<T>& vec, std::size_t p, std::size_t r) {
+  if (p < r) {
+    std::size_t q = sort::Partition(vec, p, r);
+    if (q != 0) {
+      QuickSortHelper(vec, p, q-1);
+    }
+    QuickSortHelper(vec, q+1, r);
+  }
+}
+
+template <typename T>
+std::size_t RandomPartition(std::vector<T>& vec, std::size_t p, std::size_t r) {
+  std::size_t j = ((r*7621 + 1) % 32768) % (r - p + 1);
+  std::swap(vec[r], vec[j+p]);
+  return sort::Partition(vec, p, r);
+ }
+
+template <typename T>
+void RandQuickSortHelper(std::vector<T>& vec, std::size_t p, std::size_t r) {
+  if (p < r) {
+    std::size_t q = RandomPartition(vec, p, r);
+    if (q != 0) {
+      RandQuickSortHelper(vec, p, q-1);
+    }
+    RandQuickSortHelper(vec, q+1, r);
+  }
+}
+
+template <typename T>
+void sort::RandomizedQuickSort(std::vector<T>& vec) {
+  if (vec.size() > 1) {
+    RandQuickSortHelper(vec, 0, vec.size()-1);
+  }
+  return;
+}
+
+template <typename T>
+void sort::QuickSort(std::vector<T>& vec) {
+  if (vec.size() > 1) {
+    QuickSortHelper(vec, 0, vec.size()-1);
+  }
+  return;
 }
 
 #endif
